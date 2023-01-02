@@ -25,7 +25,7 @@ export class AuthService {
     crearUsuario(nombre: string, email: string, password: string) {
         return this.auth.createUserWithEmailAndPassword(email, password).then(firebaseUser => {
             const newUser = new Usuario(firebaseUser.user!.uid, nombre, email);
-            return this.firestore.doc(`${firebaseUser.user!.uid}/usuario`).set(newUser);
+            return this.firestore.doc(`${firebaseUser.user!.uid}/usuario`).set({...newUser});
         });
     }
 
