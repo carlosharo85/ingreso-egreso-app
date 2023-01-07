@@ -9,6 +9,7 @@ import { AppState } from '../app.reducer';
 import * as authActions from '../auth/auth.actions';
 
 import { Usuario } from '../models/usuario.model';
+import * as ingresoEgresoActions from '../ingreso-egreso/ingreso-egreso.actions';
 
 @Injectable({
     providedIn: 'root'
@@ -17,6 +18,7 @@ export class AuthService {
 
 
     userSubscription!: Subscription;
+    private _usuario!: Usuario;
 
 
     constructor(
@@ -30,18 +32,25 @@ export class AuthService {
         this.auth.authState.subscribe( firebaseUser => {
             if (firebaseUser) {
                 this.userSubscription = this.firestore.doc(`${firebaseUser.uid}/usuario`).valueChanges().subscribe( (firestoreUser: any) => {
-                    console.log(firestoreUser);
-                    const user = Usuario.fromFirebase(firestoreUser);
-                    this.store.dispatch(authActions.setUser({ user }));
+                    const usuario = Usuario.fromFirebase(firestoreUser);
+                    this._usuario = usuario;
+                    this.store.dispatch(authActions.setUser({ user: this._usuario }));
                 });
             }
             else {
+                this._usuario = new Usuario('-1', '', '');
                 if (this.userSubscription) {
                     this.userSubscription.unsubscribe();
                 }
                 this.store.dispatch(authActions.unSetUser());
+                this.store.dispatch(ingresoEgresoActions.unSetItems());
             }
         });
+    }
+
+
+    get usuario() {
+        return this._usuario;
     }
 
 

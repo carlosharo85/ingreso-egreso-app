@@ -27,6 +27,12 @@ import { FooterComponent } from './shared/footer/footer.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 
+// Pipes
+import { OrdenIngresoEgresoPipe } from './pipes/orden-ingreso-egreso.pipe';
+
+// Graficas
+import { NgChartsModule } from 'ng2-charts';
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -38,7 +44,8 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
         DetalleComponent,
         FooterComponent,
         NavbarComponent,
-        SidebarComponent
+        SidebarComponent,
+        OrdenIngresoEgresoPipe
     ],
     imports: [
         BrowserModule,
@@ -46,6 +53,7 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
         AppRoutingModule,
         AngularFireModule.initializeApp(environment.firebase),
         AngularFireAuthModule,
+        NgChartsModule,
         StoreModule.forRoot( appReducers ),
         StoreDevtoolsModule.instrument({
             maxAge: 25, // Retains last 25 states
