@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+import { filter, Subscription } from 'rxjs';
 import { AppState } from 'src/app/app.reducer';
 
 @Component({
@@ -21,7 +21,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.usuarioSubscription = this.store.select('user')
-        .subscribe(({ user }) => {
+        .pipe(
+            filter(auth => auth.user != null)
+        ).subscribe(({ user }) => {
             this.nombre = user.nombre;
         });
     }
